@@ -102,23 +102,14 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            {gameState.status !== 'MENU' ? (
-              <button 
-                onClick={resetGame}
-                className="text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
-              >
-                Abandonar
-              </button>
-            ) : (
-              <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-semibold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all active:scale-95">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                Mi Cuenta
-              </button>
-            )}
-          </div>
+          {gameState.status !== 'MENU' && (
+            <button 
+              onClick={resetGame}
+              className="text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
+            >
+              Abandonar
+            </button>
+          )}
         </div>
       </header>
 
