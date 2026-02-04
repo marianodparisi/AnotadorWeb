@@ -1,5 +1,5 @@
 
-export type GameType = 'GENERALA' | 'DIEZ_MIL' | 'TRUCO' | 'CHANCHO' | 'CASITA_ROBADA' | 'ESCOBA_15';
+export type GameType = 'GENERALA' | 'DIEZ_MIL' | 'TRUCO' | 'CHANCHO' | 'CASITA_ROBADA' | 'ESCOBA_15' | 'UNO' | 'CHINCHON';
 
 export interface Player {
   id: string;
@@ -25,4 +25,6 @@ export const GAME_DETAILS = {
   CHANCHO: { name: 'Chancho', icon: '🐷', description: 'C-H-A-N-C-H-O' },
   CASITA_ROBADA: { name: 'Casita Robada', icon: '🏠', description: 'Robá cartas de la mesa.' },
   ESCOBA_15: { name: 'Escoba del 15', icon: '🧹', description: 'Sumá 15 y barré la mesa.' },
+  UNO: { name: 'Uno', icon: '🌈', description: 'Descartate y gritá ¡Uno!' },
+  CHINCHON: { name: 'Chinchón', icon: '🂡', description: 'Cortá con menos 10.' },
 };
