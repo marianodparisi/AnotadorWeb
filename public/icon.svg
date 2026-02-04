@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Bandera Argentina: celeste, blanco, celeste con Sol de Mayo -->
+  <rect width="512" height="512" fill="#74ACDF"/>
+  <rect y="170" width="512" height="172" fill="#fff"/>
+  <!-- Sol de Mayo (simplificado) -->
+  <g transform="translate(256,256)">
+    <circle r="48" fill="#F4B400"/>
+    <path d="M0-55 L0-72 M39-39 L51-51 M55 0 L72 0 M39 39 L51 51 M0 55 L0 72 M-39 39 L-51 51 M-55 0 L-72 0 M-39-39 L-51-51 M27-47 L35-63 M47-27 L63-35 M47 27 L63 35 M27 47 L35 63 M-27 47 L-35 63 M-47 27 L-63 35 M-47-27 L-63-35 M-27-47 L-35-63" stroke="#F4B400" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <circle r="22" fill="#F4B400"/>
+    <circle r="14" fill="#fff"/>
+  </g>
+</svg>
