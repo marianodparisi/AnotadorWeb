@@ -5,30 +5,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anotador Argento</title>
-    
+
     <!-- PWA Settings -->
-    <meta name="theme-color" content="#F3F5F9">
+    <meta name="theme-color" content="#F0F4F8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icon.svg">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#74ACDF",
+                        secondary: "#F6B40E",
+                        "bg-main": "#F0F4F8",
+                    },
+                    fontFamily: {
+                        display: ["Fredoka", "sans-serif"],
+                        body: ["Nunito", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'clay': 'inset -10px -10px 20px rgba(0,0,0,0.1), inset 10px 10px 20px rgba(255,255,255,0.4), 8px 12px 20px rgba(0,0,0,0.15)',
+                        'clay-sm': 'inset -4px -4px 8px rgba(0,0,0,0.1), inset 4px 4px 8px rgba(255,255,255,0.4), 2px 4px 8px rgba(0,0,0,0.1)',
+                    }
+                },
+            },
+        };
+    </script>
     <style>
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #F3F5F9;
+            font-family: 'Nunito', sans-serif;
+            background-color: #F0F4F8;
             -webkit-tap-highlight-color: transparent;
         }
-        /* Hide scrollbar for Chrome, Safari and Opera */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
-        /* Hide scrollbar for IE, Edge and Firefox */
         .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .icon-3d-wrapper {
+            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.15));
+            transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+        .card-hover:hover .icon-3d-wrapper {
+            transform: perspective(1000px) rotateY(-5deg) rotateX(2deg) scale(1.1);
         }
     </style>
 <script type="importmap">
@@ -41,7 +69,7 @@
 }
 </script>
 </head>
-<body>
+<body class="antialiased">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
