@@ -14,7 +14,7 @@ const GAME_CARDS: { type: GameType; name: string; desc: string; icon: string; bg
   { type: 'CASITA_ROBADA', name: 'Casita', desc: 'Robá cartas', icon: '🏠', bg: 'bg-[#34D399]' },
   { type: 'ESCOBA_15', name: 'Escoba', desc: 'Sumá 15 y barré', icon: '🧹', bg: 'bg-[#2DD4BF]' },
   { type: 'UNO', name: 'Uno', desc: 'Descartate rápido', icon: '🌈', bg: 'bg-[#FB7185]' },
-  { type: 'CHINCHON', name: 'Chinchón', desc: 'Cortá con menos 10', icon: '🂡', bg: 'bg-[#818CF8]' },
+  { type: 'CHINCHON', name: 'Chinchón', desc: 'Cortá con menos 10', icon: '🃏', bg: 'bg-[#818CF8]' },
 ];
 
 const GameSelection: React.FC<GameSelectionProps> = ({ onSelect }) => {
