@@ -9,7 +9,7 @@ interface GameSelectionProps {
 const GAME_CARDS: { type: GameType; name: string; desc: string; icon: string; bg: string; textDark?: boolean }[] = [
   { type: 'GENERALA', name: 'Generala', desc: 'El clásico de los dados', icon: '🎲', bg: 'bg-[#A78BFA]' },
   { type: 'DIEZ_MIL', name: '10.000', desc: 'Suma hasta ganar', icon: '✨', bg: 'bg-[#FCD34D]', textDark: true },
-  { type: 'TRUCO', name: 'Truco', desc: '¡Quiero vale cuatro!', icon: '🃏', bg: 'bg-[#60A5FA]' },
+  { type: 'TRUCO', name: 'Truco', desc: '¡Quiero vale cuatro!', icon: '⚔️', bg: 'bg-[#60A5FA]' },
   { type: 'CHANCHO', name: 'Chancho', desc: 'C-H-A-N-C-H-O', icon: '🐷', bg: 'bg-[#F472B6]' },
   { type: 'CASITA_ROBADA', name: 'Casita', desc: 'Robá cartas', icon: '🏠', bg: 'bg-[#34D399]' },
   { type: 'ESCOBA_15', name: 'Escoba', desc: 'Sumá 15 y barré', icon: '🧹', bg: 'bg-[#2DD4BF]' },
