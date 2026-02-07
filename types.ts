@@ -11,11 +11,20 @@ export interface Player {
 export interface GameState {
   type: GameType;
   players: Player[];
-  status: 'MENU' | 'SETUP' | 'PLAYING' | 'FINISHED';
+  status: 'MENU' | 'SETUP' | 'PLAYING' | 'FINISHED' | 'HISTORY';
   config: {
     maxPoints?: number;
     isTeams?: boolean;
   };
+}
+
+export interface GameRecord {
+  id?: number;
+  type: GameType;
+  players: { name: string; score: number }[];
+  winner?: string;
+  date: string;
+  config?: { maxPoints?: number };
 }
 
 export const GAME_DETAILS = {

@@ -1,8 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { GameType, Player, GameState, GAME_DETAILS } from './types';
+import { saveGame } from './db';
 import GameSelection from './components/GameSelection';
 import PlayerSetup from './components/PlayerSetup';
+import GameHistory from './components/GameHistory';
 import TrucoBoard from './components/ScoreBoards/TrucoBoard';
 import GeneralaBoard from './components/ScoreBoards/GeneralaBoard';
 import DiezMilBoard from './components/ScoreBoards/DiezMilBoard';
@@ -16,6 +18,7 @@ const App: React.FC = () => {
     status: 'MENU',
     config: {}
   });
+  const gameSavedRef = useRef(false);
 
   const selectGame = (type: GameType) => {
     setGameState(prev => ({ ...prev, type, status: 'SETUP' }));
@@ -28,25 +31,62 @@ const App: React.FC = () => {
       score: 0,
       history: []
     }));
+    gameSavedRef.current = false;
     setGameState(prev => ({ ...prev, players: initialPlayers, status: 'PLAYING', config }));
   };
 
   const updateScore = (playerId: string, points: number, extraData?: any) => {
     setGameState(prev => ({
       ...prev,
-      players: prev.players.map(p => 
-        p.id === playerId 
-          ? { ...p, score: p.score + points, history: [...p.history, extraData || points] } 
+      players: prev.players.map(p =>
+        p.id === playerId
+          ? { ...p, score: p.score + points, history: [...p.history, extraData || points] }
           : p
       )
     }));
   };
 
+  const saveCurrentGame = async (state: GameState) => {
+    if (gameSavedRef.current) return;
+    if (state.players.length === 0) return;
+    const hasAnyScore = state.players.some(p => p.score !== 0);
+    if (!hasAnyScore) return;
+
+    gameSavedRef.current = true;
+
+    const maxScore = Math.max(...state.players.map(p => p.score));
+    const topPlayers = state.players.filter(p => p.score === maxScore);
+    const winner = topPlayers.length === 1 ? topPlayers[0].name : undefined;
+
+    await saveGame({
+      type: state.type,
+      players: state.players.map(p => ({ name: p.name, score: p.score })),
+      winner,
+      date: new Date().toISOString(),
+      config: state.config.maxPoints ? { maxPoints: state.config.maxPoints } : undefined,
+    });
+  };
+
   const resetGame = () => {
+    if (gameState.status === 'PLAYING') {
+      saveCurrentGame(gameState);
+    }
     setGameState({
       type: 'GENERALA',
       players: [],
       status: 'MENU',
+      config: {}
+    });
+  };
+
+  const openHistory = () => {
+    if (gameState.status === 'PLAYING') {
+      saveCurrentGame(gameState);
+    }
+    setGameState({
+      type: 'GENERALA',
+      players: [],
+      status: 'HISTORY',
       config: {}
     });
   };
@@ -78,7 +118,7 @@ const App: React.FC = () => {
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3 cursor-pointer group" onClick={resetGame}>
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300 overflow-hidden">
-              {gameState.status === 'MENU' ? '🇦🇷' : (
+              {gameState.status === 'MENU' || gameState.status === 'HISTORY' ? '🇦🇷' : (
                 gameState.type === 'UNO' ? (
                   <svg viewBox="0 0 100 100" className="w-8 h-8">
                      <circle cx="50" cy="50" r="48" fill="white" />
@@ -94,22 +134,37 @@ const App: React.FC = () => {
             </div>
             <div>
               <h1 className="font-bold text-lg leading-tight text-slate-800">
-                {gameState.status === 'MENU' ? 'Anotador Argento' : GAME_DETAILS[gameState.type].name}
+                {gameState.status === 'MENU' || gameState.status === 'HISTORY' ? 'Anotador Argento' : GAME_DETAILS[gameState.type].name}
               </h1>
-              {gameState.status !== 'MENU' && (
+              {gameState.status !== 'MENU' && gameState.status !== 'HISTORY' && (
                 <p className="text-xs text-slate-500 font-medium">Jugando ahora</p>
               )}
             </div>
           </div>
-          
-          {gameState.status !== 'MENU' && (
-            <button 
-              onClick={resetGame}
-              className="text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
-            >
-              Abandonar
-            </button>
-          )}
+
+          <div className="flex items-center gap-2">
+            {gameState.status === 'MENU' && (
+              <button
+                onClick={openHistory}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                title="Historial"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span className="text-sm font-semibold hidden sm:inline">Historial</span>
+              </button>
+            )}
+            {gameState.status === 'PLAYING' && (
+              <button
+                onClick={resetGame}
+                className="text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
+              >
+                Abandonar
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -121,6 +176,7 @@ const App: React.FC = () => {
             {renderBoard()}
           </div>
         )}
+        {gameState.status === 'HISTORY' && <GameHistory onBack={resetGame} />}
       </main>
 
       <style>{`
