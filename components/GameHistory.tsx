@@ -1,7 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
-import { GameRecord, GAME_DETAILS, GameType } from '../types';
+import { GameRecord, GameType, GAME_DETAILS } from '../types';
 import { getAllGames, deleteGame } from '../db';
+
+const NON_CONTINUABLE: GameType[] = ['GENERALA', 'DIEZ_MIL'];
 
 interface GameHistoryProps {
   onBack: () => void;
@@ -127,12 +129,14 @@ const GameHistory: React.FC<GameHistoryProps> = ({ onBack, onLoadGame }) => {
                   ))}
                 </div>
 
-                <button
-                  onClick={() => onLoadGame(game)}
-                  className="w-full py-2.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-2xl text-sm font-bold hover:bg-blue-100 transition-colors active:scale-[0.98]"
-                >
-                  Continuar partida
-                </button>
+                {!NON_CONTINUABLE.includes(game.type) && (
+                  <button
+                    onClick={() => onLoadGame(game)}
+                    className="w-full py-2.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-2xl text-sm font-bold hover:bg-blue-100 transition-colors active:scale-[0.98]"
+                  >
+                    Continuar partida
+                  </button>
+                )}
               </div>
             );
           })}
