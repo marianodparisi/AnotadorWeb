@@ -23,6 +23,12 @@ const DiezMilBoard: React.FC<DiezMilBoardProps> = ({ players, onUpdateScore }) =
   };
 
   const currentPlayer = players.find(p => p.id === activePlayer);
+  const winner = players.find(p => p.score >= 10000);
+  const gameFinished = !!winner;
+
+  const getRanking = () => {
+    return [...players].sort((a, b) => b.score - a.score);
+  };
 
   return (
     <div className="space-y-6">
@@ -30,10 +36,12 @@ const DiezMilBoard: React.FC<DiezMilBoardProps> = ({ players, onUpdateScore }) =
         {players.map(p => (
           <button
             key={p.id}
-            onClick={() => setActivePlayer(p.id)}
+            onClick={() => !gameFinished && setActivePlayer(p.id)}
             className={`p-4 rounded-2xl border transition-all text-center ${
-              activePlayer === p.id 
-                ? 'bg-sky-500 text-white border-sky-600 shadow-md ring-4 ring-sky-100' 
+              p.score >= 10000
+                ? 'bg-emerald-500 text-white border-emerald-600 shadow-md ring-4 ring-emerald-100'
+                : activePlayer === p.id && !gameFinished
+                ? 'bg-sky-500 text-white border-sky-600 shadow-md ring-4 ring-sky-100'
                 : 'bg-white text-slate-700 border-slate-200'
             }`}
           >
@@ -43,29 +51,59 @@ const DiezMilBoard: React.FC<DiezMilBoardProps> = ({ players, onUpdateScore }) =
         ))}
       </div>
 
-      <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 text-center">
-        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Turno de</h3>
-        <h4 className="text-2xl font-black text-slate-800 mb-6">{currentPlayer?.name}</h4>
-        
-        <div className="max-w-[200px] mx-auto space-y-4">
-          <input
-            type="number"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleAddPoints()}
-            className="w-full text-center text-4xl font-bold bg-slate-50 border-b-4 border-slate-200 focus:border-sky-500 outline-none p-4 transition-all"
-            placeholder="Puntos"
-            autoFocus
-          />
-          <button
-            onClick={handleAddPoints}
-            disabled={!inputValue}
-            className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-200 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-emerald-100"
-          >
-            Anotar Puntos
-          </button>
+      {gameFinished ? (
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 animate-fade-in-up">
+          <h3 className="text-xl font-extrabold text-slate-900 mb-4 text-center">Resultado Final</h3>
+          <div className="space-y-3">
+            {getRanking().map((p, i) => (
+              <div
+                key={p.id}
+                className={`flex items-center justify-between px-4 py-3 rounded-2xl ${
+                  i === 0
+                    ? 'bg-emerald-50 border border-emerald-200'
+                    : 'bg-slate-50 border border-slate-100'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className={`text-lg font-black ${i === 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
+                    {i === 0 ? '🏆' : `#${i + 1}`}
+                  </span>
+                  <span className={`font-bold ${i === 0 ? 'text-emerald-800' : 'text-slate-700'}`}>
+                    {p.name}
+                  </span>
+                </div>
+                <span className={`text-xl font-black ${i === 0 ? 'text-emerald-600' : 'text-slate-500'}`}>
+                  {p.score} pts
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 text-center">
+          <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Turno de</h3>
+          <h4 className="text-2xl font-black text-slate-800 mb-6">{currentPlayer?.name}</h4>
+
+          <div className="max-w-[200px] mx-auto space-y-4">
+            <input
+              type="number"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAddPoints()}
+              className="w-full text-center text-4xl font-bold bg-slate-50 border-b-4 border-slate-200 focus:border-sky-500 outline-none p-4 transition-all"
+              placeholder="Puntos"
+              autoFocus
+            />
+            <button
+              onClick={handleAddPoints}
+              disabled={!inputValue}
+              className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-200 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-emerald-100"
+            >
+              Anotar Puntos
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-2">
         <h3 className="font-bold text-slate-600 px-2">Historial de rondas</h3>
