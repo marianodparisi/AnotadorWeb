@@ -92,24 +92,24 @@ const GeneralaBoard: React.FC<GeneralaBoardProps> = ({ players, onUpdateScore })
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200">
+      <div className="bg-white rounded-[2rem] overflow-hidden shadow-clay border border-white/60">
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="sticky left-0 z-10 bg-slate-50 p-3 text-left font-bold text-slate-500 w-20 min-w-[80px] border-r border-slate-200">Cat.</th>
+              <tr className="bg-bg-main border-b border-gray-200">
+                <th className="sticky left-0 z-10 bg-bg-main p-3 text-left font-bold text-gray-500 w-20 min-w-[80px] border-r border-gray-200">Cat.</th>
                 {players.map(p => (
-                  <th key={p.id} className="p-2 text-center font-black text-slate-800 min-w-[72px]">
+                  <th key={p.id} className="p-2 text-center font-extrabold text-gray-800 min-w-[72px]">
                     <div className="truncate max-w-[72px] mx-auto text-xs sm:text-sm">{p.name}</div>
-                    <div className="text-sky-500 text-[10px] sm:text-xs mt-0.5">{calculateTotal(p.id)} pts</div>
+                    <div className="text-primary text-[10px] sm:text-xs mt-0.5 font-bold">{calculateTotal(p.id)} pts</div>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {CATEGORIES.map(cat => (
-                <tr key={cat.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
-                  <td className="sticky left-0 z-10 bg-white p-3 font-semibold text-slate-700 text-xs border-r border-slate-200">{cat.name}</td>
+                <tr key={cat.id} className="border-b border-gray-100 last:border-0 hover:bg-bg-main/50 transition-colors">
+                  <td className="sticky left-0 z-10 bg-white p-3 font-bold text-gray-700 text-xs border-r border-gray-200">{cat.name}</td>
                   {players.map(p => {
                     const val = scores[p.id]?.[cat.id];
                     return (
@@ -117,7 +117,7 @@ const GeneralaBoard: React.FC<GeneralaBoardProps> = ({ players, onUpdateScore })
                         {val !== undefined ? (
                           <button
                             onClick={() => handleClearScore(p.id, cat.id)}
-                            className={`w-full font-bold text-base sm:text-lg cursor-pointer hover:opacity-60 transition-opacity ${val === 'X' ? 'text-red-400' : 'text-slate-800'}`}
+                            className={`w-full font-bold text-base sm:text-lg cursor-pointer hover:opacity-60 transition-opacity ${val === 'X' ? 'text-red-400' : 'text-gray-800'}`}
                             title="Click para borrar"
                           >
                             {val === 'X' ? '✕' : val}
@@ -129,7 +129,7 @@ const GeneralaBoard: React.FC<GeneralaBoardProps> = ({ players, onUpdateScore })
                               if (v === "") return;
                               handleSetScore(p.id, cat.id, v === 'X' ? 'X' : Number(v));
                             }}
-                            className="w-full max-w-[72px] p-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[10px] sm:text-xs font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 appearance-none text-center cursor-pointer hover:bg-white transition-all"
+                            className="w-full max-w-[72px] p-1.5 bg-bg-main border border-gray-200 rounded-xl text-[10px] sm:text-xs font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary appearance-none text-center cursor-pointer hover:bg-white transition-all"
                             defaultValue=""
                           >
                             <option value="" disabled>---</option>
@@ -159,27 +159,27 @@ const GeneralaBoard: React.FC<GeneralaBoardProps> = ({ players, onUpdateScore })
       </div>
 
       {gameComplete && (
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 animate-fade-in-up">
-          <h3 className="text-xl font-extrabold text-slate-900 mb-4 text-center">Resultado Final</h3>
+        <div className="bg-white rounded-[2rem] p-6 shadow-clay border border-white/60 animate-fade-in-up">
+          <h3 className="font-display text-xl font-bold text-gray-800 mb-4 text-center">Resultado Final</h3>
           <div className="space-y-3">
             {getRanking().map((p, i) => (
               <div
                 key={p.name}
                 className={`flex items-center justify-between px-4 py-3 rounded-2xl ${
                   i === 0
-                    ? 'bg-emerald-50 border border-emerald-200'
-                    : 'bg-slate-50 border border-slate-100'
+                    ? 'bg-[#34D399]/10 border border-[#34D399]/30'
+                    : 'bg-bg-main border border-gray-100'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <span className={`text-lg font-black ${i === 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
+                  <span className={`text-lg font-extrabold ${i === 0 ? 'text-[#34D399]' : 'text-gray-400'}`}>
                     {i === 0 ? '🏆' : `#${i + 1}`}
                   </span>
-                  <span className={`font-bold ${i === 0 ? 'text-emerald-800' : 'text-slate-700'}`}>
+                  <span className={`font-bold ${i === 0 ? 'text-gray-800' : 'text-gray-700'}`}>
                     {p.name}
                   </span>
                 </div>
-                <span className={`text-xl font-black ${i === 0 ? 'text-emerald-600' : 'text-slate-500'}`}>
+                <span className={`text-xl font-extrabold ${i === 0 ? 'text-[#34D399]' : 'text-gray-500'}`}>
                   {p.total} pts
                 </span>
               </div>

@@ -127,64 +127,44 @@ const App: React.FC = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#F3F5F9] text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
-      {/* Modern Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60 px-4 py-3 sm:px-6">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3 cursor-pointer group" onClick={resetGame}>
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300 overflow-hidden">
-              {gameState.status === 'MENU' || gameState.status === 'HISTORY' ? '🇦🇷' : (
-                gameState.type === 'UNO' ? (
-                  <svg viewBox="0 0 100 100" className="w-8 h-8">
-                     <circle cx="50" cy="50" r="48" fill="white" />
-                     <path d="M 50 50 L 50 4 A 46 46 0 0 0 4 50 Z" fill="#ef4444" />
-                     <path d="M 50 50 L 96 50 A 46 46 0 0 0 50 4 Z" fill="#3b82f6" />
-                     <path d="M 50 50 L 50 96 A 46 46 0 0 0 96 50 Z" fill="#22c55e" />
-                     <path d="M 50 50 L 4 50 A 46 46 0 0 0 50 96 Z" fill="#eab308" />
-                     <circle cx="50" cy="50" r="15" fill="white" />
-                     <text x="50" y="55" fontSize="13" fontWeight="900" textAnchor="middle" fill="#1e293b" fontFamily="sans-serif">UNO</text>
-                  </svg>
-                ) : GAME_DETAILS[gameState.type].icon
-              )}
-            </div>
-            <div>
-              <h1 className="font-bold text-lg leading-tight text-slate-800">
-                {gameState.status === 'MENU' || gameState.status === 'HISTORY' ? 'Anotador Argento' : GAME_DETAILS[gameState.type].name}
-              </h1>
-              {gameState.status !== 'MENU' && gameState.status !== 'HISTORY' && (
-                <p className="text-xs text-slate-500 font-medium">Jugando ahora</p>
-              )}
-            </div>
-          </div>
+  const isHome = gameState.status === 'MENU' || gameState.status === 'HISTORY';
 
-          <div className="flex items-center gap-2">
-            {gameState.status === 'MENU' && (
-              <button
-                onClick={openHistory}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                title="Historial"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-                <span className="text-sm font-semibold hidden sm:inline">Historial</span>
-              </button>
-            )}
-            {gameState.status === 'PLAYING' && (
-              <button
-                onClick={resetGame}
-                className="text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
-              >
-                Abandonar
-              </button>
-            )}
+  return (
+    <div className="min-h-screen bg-bg-main font-body text-gray-800 selection:bg-primary selection:text-white overflow-x-hidden">
+      {/* Header */}
+      <header className="flex items-center justify-between px-6 py-5 sticky top-0 bg-bg-main/90 backdrop-blur-md z-30">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={resetGame}>
+          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-clay-sm hover:scale-105 transition-transform duration-200">
+            <span className="text-xl">🇦🇷</span>
           </div>
+          <h1 className="font-display font-bold text-lg text-gray-800 tracking-tight">
+            {isHome ? 'Anotador Argento' : GAME_DETAILS[gameState.type].name}
+          </h1>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {gameState.status === 'MENU' && (
+            <button
+              onClick={openHistory}
+              className="text-gray-400 hover:text-primary transition-colors p-2 rounded-full hover:bg-blue-50"
+              title="Historial"
+            >
+              <span className="material-icons-round text-2xl">history</span>
+            </button>
+          )}
+          {(gameState.status === 'PLAYING' || gameState.status === 'SETUP') && (
+            <button
+              onClick={resetGame}
+              className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50"
+              title="Volver al menú"
+            >
+              <span className="material-icons-round text-2xl">close</span>
+            </button>
+          )}
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <main className="max-w-md mx-auto px-5 pb-12">
         {gameState.status === 'MENU' && <GameSelection onSelect={selectGame} />}
         {gameState.status === 'SETUP' && <PlayerSetup gameType={gameState.type} onStart={startGame} onBack={resetGame} />}
         {gameState.status === 'PLAYING' && (
@@ -194,6 +174,10 @@ const App: React.FC = () => {
         )}
         {gameState.status === 'HISTORY' && <GameHistory onBack={resetGame} onLoadGame={loadGame} />}
       </main>
+
+      <footer className="py-6 text-center text-xs font-bold tracking-widest uppercase text-gray-400">
+        Hecho con <span className="text-red-500 animate-pulse inline-block">❤️</span> en Argentina
+      </footer>
 
       <style>{`
         @keyframes fadeInUp {
