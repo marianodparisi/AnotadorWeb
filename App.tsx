@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { GameType, Player, GameState, GAME_DETAILS } from './types';
+import { GameType, Player, GameState, GameRecord, GAME_DETAILS } from './types';
 import { saveGame } from './db';
 import GameSelection from './components/GameSelection';
 import PlayerSetup from './components/PlayerSetup';
@@ -91,6 +91,22 @@ const App: React.FC = () => {
     });
   };
 
+  const loadGame = (record: GameRecord) => {
+    const loadedPlayers: Player[] = record.players.map((p, index) => ({
+      id: `player-${index}-${Date.now()}`,
+      name: p.name,
+      score: p.score,
+      history: []
+    }));
+    gameSavedRef.current = true;
+    setGameState({
+      type: record.type,
+      players: loadedPlayers,
+      status: 'PLAYING',
+      config: record.config || {}
+    });
+  };
+
   const renderBoard = () => {
     switch (gameState.type) {
       case 'TRUCO':
@@ -176,7 +192,7 @@ const App: React.FC = () => {
             {renderBoard()}
           </div>
         )}
-        {gameState.status === 'HISTORY' && <GameHistory onBack={resetGame} />}
+        {gameState.status === 'HISTORY' && <GameHistory onBack={resetGame} onLoadGame={loadGame} />}
       </main>
 
       <style>{`

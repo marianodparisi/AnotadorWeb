@@ -5,11 +5,13 @@ import { getAllGames, deleteGame } from '../db';
 
 interface GameHistoryProps {
   onBack: () => void;
+  onLoadGame: (record: GameRecord) => void;
 }
 
-const GameHistory: React.FC<GameHistoryProps> = ({ onBack }) => {
+const GameHistory: React.FC<GameHistoryProps> = ({ onBack, onLoadGame }) => {
   const [games, setGames] = useState<GameRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     getAllGames().then(records => {
@@ -21,6 +23,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ onBack }) => {
   const handleDelete = async (id: number) => {
     await deleteGame(id);
     setGames(prev => prev.filter(g => g.id !== id));
+    setConfirmDeleteId(null);
   };
 
   const formatDate = (iso: string) => {
@@ -64,6 +67,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ onBack }) => {
         <div className="space-y-4">
           {games.map(game => {
             const details = GAME_DETAILS[game.type as GameType];
+            const isConfirming = confirmDeleteId === game.id;
             return (
               <div
                 key={game.id}
@@ -79,12 +83,31 @@ const GameHistory: React.FC<GameHistoryProps> = ({ onBack }) => {
                       <p className="text-xs text-slate-400">{formatDate(game.date)}</p>
                     </div>
                   </div>
-                  <button
-                    onClick={() => game.id != null && handleDelete(game.id)}
-                    className="text-xs font-semibold text-slate-400 hover:text-red-500 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors"
-                  >
-                    Borrar
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {isConfirming ? (
+                      <>
+                        <button
+                          onClick={() => game.id != null && handleDelete(game.id)}
+                          className="text-xs font-semibold text-red-600 bg-red-50 border border-red-200 px-2.5 py-1.5 rounded-lg transition-colors hover:bg-red-100"
+                        >
+                          Confirmar
+                        </button>
+                        <button
+                          onClick={() => setConfirmDeleteId(null)}
+                          className="text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-1.5 rounded-lg transition-colors hover:bg-slate-100"
+                        >
+                          Cancelar
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => game.id != null && setConfirmDeleteId(game.id)}
+                        className="text-xs font-semibold text-slate-400 hover:text-red-500 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                      >
+                        Borrar
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
@@ -103,6 +126,13 @@ const GameHistory: React.FC<GameHistoryProps> = ({ onBack }) => {
                     </div>
                   ))}
                 </div>
+
+                <button
+                  onClick={() => onLoadGame(game)}
+                  className="w-full py-2.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-2xl text-sm font-bold hover:bg-blue-100 transition-colors active:scale-[0.98]"
+                >
+                  Continuar partida
+                </button>
               </div>
             );
           })}
