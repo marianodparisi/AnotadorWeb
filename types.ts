@@ -35,5 +35,5 @@ export const GAME_DETAILS = {
   CASITA_ROBADA: { name: 'Casita Robada', icon: '🏠', description: 'Robá cartas de la mesa.' },
   ESCOBA_15: { name: 'Escoba del 15', icon: '🧹', description: 'Sumá 15 y barré la mesa.' },
   UNO: { name: 'Uno', icon: '🌈', description: 'Descartate y gritá ¡Uno!' },
-  CHINCHON: { name: 'Chinchón', icon: '🂡', description: 'Cortá con menos 10.' },
+  CHINCHON: { name: 'Chinchón', icon: '🃏', description: 'Cortá con menos 10.' },
 };
